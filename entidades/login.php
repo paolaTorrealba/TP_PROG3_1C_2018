@@ -12,7 +12,7 @@ class login{
     public $estado;
 
     public static function consultaLogin($arrayDeParametros){     
-    echo "consultaLogin";   
+    
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         
         $sql = $pdo->RetornarConsulta("SELECT * FROM usuarios WHERE usuario=:usuario");
@@ -22,10 +22,17 @@ class login{
 
         $usuario = $sql->fetchAll(PDO::FETCH_CLASS, 'login');
 
+         /*registro el ingreso al sistema*/
+         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+         $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE usuarios set ult_fecha_log=CURRENT_TIMESTAMP where usuario=:usuario");
+         $consulta->bindValue(':usuario',$arrayDeParametros['usuario'], PDO::PARAM_STR);
+         $consulta->execute();
+
         if($usuario!=NULL){
             if($usuario[0]->clave == $arrayDeParametros['clave']){
                 if($usuario[0]->estado ==1 || $usuario[0]->estado =="activo"){
                     $resultado = $usuario;
+                   
                 }
                 else{
                     $resultado="El usuario no esta activo";
