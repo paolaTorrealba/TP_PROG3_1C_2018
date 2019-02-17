@@ -5,8 +5,6 @@ require_once './entidades/AutentificadorJWT.php';
 
 class UsuarioApi{
 
-   
-
     public function cargarUno($request, $response, $args){ //OK
         $arrayDeParametros = $request->getParsedBody();
         $respuesta = usuario::crearUsuario($arrayDeParametros);
@@ -21,13 +19,37 @@ class UsuarioApi{
         return $response->withJson($objDelaRespuesta, 200);
     }
 
-    public function traerTodos($request, $response, $args){
-        $usuarios = usuario::traerTodos();
-        $newResponse = $response->withJson($usuarios, 200);
-        return $newResponse;
+
+    public function borrarUno($request, $response, $args){
+        $arrayDeParametros = $request->getParsedBody();
+        $respuesta = usuario::borrarUsuario($arrayDeParametros);
+        if($respuesta>0){
+            $objDelaRespuesta->respuesta="Se ha eliminado el usuario";
+        }
+        else{
+            $objDelaRespuesta->respuesta=$respuesta;  
+        }
+        
+        return $response->withJson($objDelaRespuesta, 200);
     }
+
+
+
+     public function modificarUno($request, $response, $args){
+        $arrayDeParametros = $request->getParsedBody();
+
+        $respuesta = usuario::modificarUsuario($arrayDeParametros);
+
+        if($respuesta>0){
+            $objDelaRespuesta->respuesta="Se ha modificado el usuario";
+        }
+        else{
+            $objDelaRespuesta->respuesta=$respuesta;  
+        }
+        
+        return $response->withJson($objDelaRespuesta, 200);
+    }
+
     
 }
-
-
 ?>
