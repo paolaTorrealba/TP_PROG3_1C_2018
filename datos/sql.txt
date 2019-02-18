@@ -1,0 +1,247 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.3
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 18-02-2019 a las 05:43:06
+-- Versión del servidor: 10.1.36-MariaDB
+-- Versión de PHP: 7.2.10
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `comanda`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `comanda`
+--
+
+CREATE TABLE `comanda` (
+  `id_comanda` int(11) NOT NULL,
+  `id_menu` int(11) NOT NULL,
+  `codigo_mesa` bigint(5) NOT NULL,
+  `estado` varchar(30) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `nombre_cliente` varchar(50) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `precio_final` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `encuesta`
+--
+
+CREATE TABLE `encuesta` (
+  `id_comanda` int(5) NOT NULL,
+  `puntosMesa` int(2) NOT NULL,
+  `puntosResto` int(2) NOT NULL,
+  `puntosMozo` int(2) NOT NULL,
+  `puntosCocinero` int(2) NOT NULL,
+  `descripcion` varchar(66) COLLATE utf8_spanish2_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `encuesta`
+--
+
+INSERT INTO `encuesta` (`id_comanda`, `puntosMesa`, `puntosResto`, `puntosMozo`, `puntosCocinero`, `descripcion`) VALUES
+(0, 9, 6, 7, 8, 'Muy buen servicio, recomendable, buenos precios');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `menu`
+--
+
+CREATE TABLE `menu` (
+  `id` bigint(5) UNSIGNED ZEROFILL NOT NULL,
+  `detalle` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `sector` enum('cocina','barra','cerveza','candy') COLLATE utf8_spanish2_ci NOT NULL,
+  `precio` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `menu`
+--
+
+INSERT INTO `menu` (`id`, `detalle`, `sector`, `precio`) VALUES
+(00001, 'pizza muzarella', 'cocina', 210),
+(00002, 'hamburgueza', 'cocina', 100),
+(00003, 'agua chica', 'barra', 50),
+(00004, 'copa helada', 'candy', 80),
+(00005, 'flan', 'candy', 65),
+(00006, 'cerveza negra chica', 'cerveza', 60),
+(00007, 'cerveza negra grande', 'cerveza', 80),
+(00008, 'cerveza rubia chica', 'cerveza', 55),
+(00009, 'cerveza rubia grande', 'cerveza', 75),
+(00010, 'ravioles verdura', 'cocina', 110),
+(00011, 'sorrentinos', 'cocina', 120),
+(00012, 'gaseosa chica', 'barra', 55),
+(00013, 'fernet', 'barra', 115),
+(00014, 'empanada carne', 'cocina', 35),
+(00015, 'provoleta', 'cocina', 45);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mesa`
+--
+
+CREATE TABLE `mesa` (
+  `id_mesa` bigint(5) UNSIGNED ZEROFILL NOT NULL,
+  `estado` enum('cerrada','con clientes esperando pedido','con clientes comiendo','con clientes pagando') COLLATE utf8_spanish2_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `mesa`
+--
+
+INSERT INTO `mesa` (`id_mesa`, `estado`) VALUES
+(00001, 'cerrada'),
+(00002, 'cerrada'),
+(00003, 'cerrada'),
+(00004, 'cerrada'),
+(00005, 'cerrada'),
+(00006, 'cerrada'),
+(00007, 'cerrada'),
+(00008, 'cerrada'),
+(00009, 'cerrada'),
+(00010, 'cerrada'),
+(00011, 'cerrada'),
+(00012, 'cerrada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido`
+--
+
+CREATE TABLE `pedido` (
+  `codigo` varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
+  `tipo_usuario` enum('bartender','cervecero','cocinero') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `estado` enum('pendiente','en preparacion','listo para servir','servido','pagado') COLLATE utf8_spanish2_ci NOT NULL,
+  `tiempo_estimado` time DEFAULT '00:00:00',
+  `tiempo_fin` datetime DEFAULT NULL,
+  `cliente` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `foto_mesa` mediumtext COLLATE utf8_spanish2_ci,
+  `tiempo_inicio` datetime DEFAULT NULL,
+  `id_usuario` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`codigo`, `tipo_usuario`, `estado`, `tiempo_estimado`, `tiempo_fin`, `cliente`, `foto_mesa`, `tiempo_inicio`, `id_usuario`) VALUES
+('fM7fb', 'bartender', 'pagado', '00:00:47', '2018-12-01 19:42:33', 'Pochin', NULL, NULL, 0),
+('MmbhV', 'bartender', 'servido', '00:00:30', '2018-12-01 18:48:57', 'ElCuli', NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` int(3) UNSIGNED ZEROFILL NOT NULL,
+  `usuario` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `perfil` enum('socio','mozo','cocinero','bartender','cervecero') COLLATE utf8_spanish2_ci NOT NULL,
+  `estado` enum('activo','suspendido','eliminado','') COLLATE utf8_spanish2_ci DEFAULT 'activo',
+  `nombre` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
+  `apellido` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
+  `clave` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
+  `ult_fecha_log` datetime DEFAULT NULL,
+  `fecha_baja` datetime DEFAULT NULL,
+  `fecha_alta` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `usuario`, `perfil`, `estado`, `nombre`, `apellido`, `clave`, `ult_fecha_log`, `fecha_baja`, `fecha_alta`) VALUES
+(001, 'Admin', 'socio', 'activo', 'Nicolas', 'Gomez', '123', '2019-02-17 20:33:28', NULL, NULL),
+(002, 'PEREZ.PEPE', 'mozo', 'eliminado', 'Pepe', 'Perez', '123', NULL, '2019-02-17 19:30:30', NULL),
+(003, 'DOMINGUEZ.JOSE', 'cocinero', 'activo', 'Jose', 'Dominguez', '456', NULL, NULL, NULL),
+(004, 'COMELLI.MICA', 'bartender', 'activo', 'Micaela', 'Comelli', '456', NULL, NULL, NULL),
+(005, 'MENDEZ.AGUS', 'cervecero', 'activo', 'Agustin', 'Mendez', '456', NULL, NULL, NULL),
+(006, 'GOMEZ.SEBA', 'cocinero', 'eliminado', 'Sebastian', 'Gomez', '123', '2019-02-17 10:42:44', '2019-02-17 19:01:00', NULL),
+(007, 'PIRULO.JOSE', 'mozo', 'eliminado', 'Jose', 'Pirulo', '123', NULL, '2019-02-17 20:41:40', NULL),
+(010, 'TORREALBA.PAOL', 'socio', 'activo', 'Paola', 'Torrealba', '999', '2019-02-17 10:39:51', NULL, NULL),
+(013, 'MANDARINA.LORE', 'socio', 'activo', 'Lorena', 'Mandarina', '123', NULL, NULL, NULL);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `encuesta`
+--
+ALTER TABLE `encuesta`
+  ADD PRIMARY KEY (`id_comanda`);
+
+--
+-- Indices de la tabla `menu`
+--
+ALTER TABLE `menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `mesa`
+--
+ALTER TABLE `mesa`
+  ADD PRIMARY KEY (`id_mesa`);
+
+--
+-- Indices de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD PRIMARY KEY (`codigo`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `usuario` (`usuario`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `menu`
+--
+ALTER TABLE `menu`
+  MODIFY `id` bigint(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT de la tabla `mesa`
+--
+ALTER TABLE `mesa`
+  MODIFY `id_mesa` bigint(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(3) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
