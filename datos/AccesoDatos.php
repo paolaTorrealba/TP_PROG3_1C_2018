@@ -6,8 +6,12 @@ class AccesoDatos
  
     private function __construct()
     {
-        try { 
-            $this->objetoPDO = new PDO('mysql:host=localhost;dbname=comanda;charset=utf8', 'root', '', array(PDO::ATTR_EMULATE_PREPARES => false,PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+         try { 
+           //Configuracion local
+             $this->objetoPDO = new PDO('mysql:host=localhost;dbname=u493185436_tp;charset=utf8', 'root', '', array(PDO::ATTR_EMULATE_PREPARES => false,PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+            //Configuracion Hostinger
+            //$this->objetoPDO = new PDO('mysql:host=localhost;dbname=u493185436_tp;charset=utf8', 'u493185436_root', 'consultor19', array(PDO::ATTR_EMULATE_PREPARES => false,PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $this->objetoPDO->exec("SET CHARACTER SET utf8");
             } 
         catch (PDOException $e) { 

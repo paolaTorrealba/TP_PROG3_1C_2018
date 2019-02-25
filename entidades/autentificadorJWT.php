@@ -3,12 +3,15 @@ require_once './vendor/autoload.php';
 use Firebase\JWT\JWT;
 
 class AutentificadorJWT
+
+// OPERACIONES
+//-CrearToken($datos)
 {
     private static $claveSecreta = 'ClaveSuperSecreta@';
     private static $tipoEncriptacion = ['HS256'];
     private static $aud = null;
     
-    public static function CrearToken($datos)
+    public static function crearToken($datos)
     {
         $ahora = time();
         $payload = array(
@@ -22,11 +25,11 @@ class AutentificadorJWT
         return JWT::encode($payload, self::$claveSecreta);
     }
     
-    public static function VerificarToken($token)
-    {
+    public static function verificarToken($token) {
        
         if(empty($token)|| $token=="")
         {
+            echo "token vacio :)";
             throw new Exception("El token esta vacio.");
         } 
         // las siguientes lineas lanzan una excepcion, de no ser correcto o de haberse terminado el tiempo       
@@ -37,7 +40,7 @@ class AutentificadorJWT
             self::$tipoEncriptacion
             );
         } catch (ExpiredException $e) {
-            //var_dump($e);
+            var_dump($e);
            throw new Exception("Clave fuera de tiempo");
         }
         
@@ -83,4 +86,15 @@ class AutentificadorJWT
         
         return sha1($aud);
     }
+
+
+    function generateRandomString($length, $fijosIniciales="") {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = $fijosIniciales;
+        for ($i = 0; $i < $length - strlen($fijosIniciales) ; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }  
 }

@@ -11,11 +11,15 @@ class login{
     public $apellido;
     public $estado;
 
+   //  OPERACIONES
+    //-consultaLogin($arrayDeParametros)
+
+
     public static function consultaLogin($arrayDeParametros){     
     
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         
-        $sql = $pdo->RetornarConsulta("SELECT * FROM usuarios WHERE usuario=:usuario");
+        $sql = $pdo->RetornarConsulta("SELECT * FROM usuario WHERE usuario=:usuario");
         $sql->bindValue(':usuario',$arrayDeParametros['usuario'], PDO::PARAM_STR);
         
         $sql->execute();
@@ -24,7 +28,7 @@ class login{
 
          /*registro el ingreso al sistema*/
          $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-         $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE usuarios set ult_fecha_log=CURRENT_TIMESTAMP where usuario=:usuario");
+         $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE usuario set ult_fecha_log=CURRENT_TIMESTAMP where usuario=:usuario");
          $consulta->bindValue(':usuario',$arrayDeParametros['usuario'], PDO::PARAM_STR);
          $consulta->execute();
 
@@ -48,7 +52,6 @@ class login{
 
         return $resultado;
     }
-
 }
 
 
