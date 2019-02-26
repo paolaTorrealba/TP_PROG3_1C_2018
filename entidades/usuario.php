@@ -49,9 +49,20 @@ class Usuario
 
         return $resultado;
     }
+   
 
+public static function traerActividadEmpleado(){
 
+        $pdo = AccesoDatos::dameUnObjetoAcceso();
+        $sql = $pdo->RetornarConsulta(" select usuario.ult_fecha_log as log, usuario.estado as estado, usuario.usuario, sum(pedido_plato.cantidad) as operaciones from usuario  
+          inner join pedido_plato on pedido_plato.usuario=usuario.usuario 
+          group by  pedido_plato.usuario");
+        $sql->execute();
 
+        $resultado = $sql->fetchall(PDO::FETCH_CLASS, "usuario");       
+
+        return $resultado;
+    }
 
 
     public function borrarUsuario($arrayDeParametros){

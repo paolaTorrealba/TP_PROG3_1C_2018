@@ -45,6 +45,9 @@ $app->group('/usuario', function () {
   $this->get('/operacionesPorSector', \usuarioApi::class . ':traerOperacionesPorSector')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
   $this->get('/operacionesPorSectorYEmpl', \usuarioApi::class . ':traerOperacionesPorSectorYEmpl')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
   $this->get('/cantidadOperacionesPorEmpl', \usuarioApi::class . ':traerCantidadOperacionesPorEmpl')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
+     $this->get('/actividadEmpleados', \usuarioApi::class . ':traerActividadEmpleados')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
+
+
   
 })->add(\MWparaCORS::class . ':HabilitarCORS8080');
 
@@ -64,12 +67,14 @@ $app->group('/pedido', function () {
   $this->post('/', \pedidoApi::class . ':cargarUno')->add(\MWparaAutentificar::class . ':VerificarUsuario');
   $this->get('/', \pedidoApi::class. ':traerTodos')->add(\MWparaAutentificar::class . ':VerificarUsuario');
   $this->get('/cancelados', \pedidoApi::class. ':traerCancelados')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
+  $this->get('/pendientes', \pedidoApi::class. ':traerPendientes')->add(\MWparaAutentificar::class . ':VerificarUsuario');
   $this->post('/paraServir', \pedidoApi::class.':pedidoListoParaServir')->add(\MWparaAutentificar::class.':VerificarMozo');
   $this->post('/servido', \pedidoApi::class. ':pedidoServido')->add(\MWparaAutentificar::class . ':VerificarMozo');
   $this->post('/aPagar', \pedidoApi::class. ':pedidoAPagar')->add(\MWparaAutentificar::class . ':VerificarMozo');
   $this->post('/cerrado', \pedidoApi::class. ':cerrarPedido')->add(\MWparaAutentificar::class . ':VerificarSocio');   
   $this->get('/masVendido', \pedidoApi::class. ':traerMasVendido')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
   $this->get('/menosVendido', \pedidoApi::class. ':traerMenosVendido')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
+    $this->get('/tiempoPedidos', \pedidoApi::class . ':traerTiempoPedidos')->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
   //$this->get('/fueraDeTiempo', \pedidoApi::class. ':traerFueraDeTiempo)->add(\MWparaAutentificar::class . ':VerificarUsuario'); 
 
 })->add(\MWparaCORS::class . ':HabilitarCORS8080');

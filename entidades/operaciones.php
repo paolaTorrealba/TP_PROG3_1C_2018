@@ -17,7 +17,7 @@ class operaciones
     public function traerOperacionesPorSector(){
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         $sql = $pdo->RetornarConsulta("SELECT plato.sector, sum(cantidad) as operaciones 
-        	                           FROM `pedido_producto`inner join plato on pedido_producto.idPlato=plato.id
+        	                           FROM `pedido_plato`inner join plato on pedido_plato.idPlato=plato.id
                                        group by plato.sector");
         $sql->execute();
         $resultado = $sql->fetchall(PDO::FETCH_CLASS, "operaciones");  
@@ -26,9 +26,9 @@ class operaciones
 
     public function traerOperacionesPorSectorYEmpl(){
          $pdo = AccesoDatos::dameUnObjetoAcceso();
-        $sql = $pdo->RetornarConsulta("SELECT  pedido_producto.usuario, plato.sector, sum(cantidad) as operaciones 
-        	                           FROM `pedido_producto`inner join plato on pedido_producto.idPlato=plato.id
-                                       group by  pedido_producto.usuario order by plato.sector");
+        $sql = $pdo->RetornarConsulta("SELECT  pedido_plato.usuario, plato.sector, sum(cantidad) as operaciones 
+        	                           FROM `pedido_plato`inner join plato on pedido_plato.idPlato=plato.id
+                                       group by  pedido_plato.usuario order by plato.sector");
         $sql->execute();
         $resultado = $sql->fetchall(PDO::FETCH_CLASS, "operaciones");       
 
@@ -37,8 +37,8 @@ class operaciones
 
     public function traerCantidadOperacionesPorEmpl(){
         $pdo = AccesoDatos::dameUnObjetoAcceso();
-        $sql = $pdo->RetornarConsulta("SELECT  pedido_producto.usuario, sum(cantidad) as operaciones
-                                       FROM `pedido_producto` group by  pedido_producto.usuario ");
+        $sql = $pdo->RetornarConsulta("SELECT  pedido_plato.usuario, sum(cantidad) as operaciones
+                                       FROM `pedido_plato` group by  pedido_plato.usuario ");
         $sql->execute();
         $resultado = $sql->fetchall(PDO::FETCH_CLASS, "operaciones");       
 

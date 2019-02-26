@@ -88,13 +88,19 @@ pedido::registrarFoto($destino.$idFoto.'.'.$tipoArchivo, $respuesta[0]->codigo);
 
 
 
-
+public function traerTiempoPedidos($request, $response, $args){
+        $pedidos = pedido::traerTiempoPedidos();
+        $newResponse = $response->withJson($pedidos, 200);
+        return $newResponse;
+    }
 
     public function traerTodos($request, $response, $args){   
         $pedidos = pedido::traerTodos();
         $newResponse = $response->withJson($pedidos, 200);
         return $newResponse;
     }    
+    
+
     
     
     public function traerPedidoUsuario($request, $response){
@@ -218,6 +224,12 @@ pedido::registrarFoto($destino.$idFoto.'.'.$tipoArchivo, $respuesta[0]->codigo);
 
     public function traerCancelados($request, $response, $args){   
         $pedidos = pedido::traerCancelados();
+        $newResponse = $response->withJson($pedidos, 200);
+        return $newResponse;
+    }
+
+     public function traerPendientes($request, $response, $args){   
+        $pedidos = pedido::traerPendientes();
         $newResponse = $response->withJson($pedidos, 200);
         return $newResponse;
     }

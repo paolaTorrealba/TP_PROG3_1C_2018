@@ -108,6 +108,23 @@ class pedido{
 
     }
 
+ public static function traerTiempoPedidos(){
+
+        $pdo = AccesoDatos::dameUnObjetoAcceso();
+        $sql = $pdo->RetornarConsulta("select fechaInicio, fechaTerminado, precioFinal, pedido.*   from pedido ");
+        $sql->execute();
+
+        $resultado = $sql->fetchall(PDO::FETCH_CLASS, "pedido");       
+
+        return $resultado;
+    }
+ 
+   
+
+
+
+  
+
 
 /*
     public static function traerTodosProductos(){
@@ -126,12 +143,12 @@ class pedido{
     public function actualizarPrecioFinalPedido($arrayDeParametros)
     {
 
-        $precioFinal = pedido_producto::sumarPrecioPorCodigo($arrayDeParametros['codigo']);
+        $precioFinal = pedido_plato::sumarPrecioPorCodigo($arrayDeParametros['codigo']);
 
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         try{
             $sql =$pdo->RetornarConsulta("UPDATE  pedido AS pe
-            INNER JOIN pedido_producto AS pprod ON pprod.codigo = pe.codigo
+            INNER JOIN pedido_plato AS pprod ON pprod.codigo = pe.codigo
             SET pe.estado= 3,
                 pprod.estado=3,
                 pe.precioFinal = :precioFinal
@@ -156,7 +173,7 @@ class pedido{
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         try{
             $sql =$pdo->RetornarConsulta("UPDATE  pedido AS p
-            INNER JOIN pedido_producto AS pp ON pp.codigo = p.codigo
+            INNER JOIN pedido_plato AS pp ON pp.codigo = p.codigo
             INNER JOIN mesa AS me ON me.id = p.mesa
             SET p.estado= 4,
                 me.estado=3,
@@ -223,10 +240,22 @@ class pedido{
         return $resultado;
 
     }
+     public static function traerPendientes(){
+        $pdo = AccesoDatos::dameUnObjetoAcceso();
+        $sql = $pdo->RetornarConsulta("SELECT * from  pedido where estado='pendiente'");
+          $sql->bindValue(':pendiente',$pendiente, PDO::PARAM_STR);
+        $sql->execute();
+
+        $resultado = $sql->fetchall(PDO::FETCH_CLASS, "pedido");   
+
+        return $resultado;
+
+    }
+
 
     public static function traerMasVendido(){
         $pdo = AccesoDatos::dameUnObjetoAcceso();
-        $sql = $pdo->RetornarConsulta("SELECT COUNT(idPlato) as vecesVendido, pedido_producto.* FROM pedido_producto 
+        $sql = $pdo->RetornarConsulta("SELECT COUNT(idPlato) as vecesVendido, pedido_plato.* FROM pedido_plato 
                                        GROUP BY idPlato order by vecesVendido DESC limit 1;");
        
         $sql->execute();
@@ -238,7 +267,7 @@ class pedido{
 
     public static function traerMenosVendido(){
         $pdo = AccesoDatos::dameUnObjetoAcceso();
-        $sql = $pdo->RetornarConsulta("SELECT COUNT(idPlato) as vecesVendido , pedido_producto.* FROM pedido_producto
+        $sql = $pdo->RetornarConsulta("SELECT COUNT(idPlato) as vecesVendido , pedido_plato.* FROM pedido_plato
                                        GROUP BY idPlato order by vecesVendido ASC limit 1;");
        
         $sql->execute();

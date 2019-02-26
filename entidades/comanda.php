@@ -118,12 +118,12 @@ class pedido{
 
     public function actualizarPedidoListoParaServir($arrayDeParametros)
     {
-        $precioFinal = pedido_producto::TraerSumaPrecioPorCodigo($arrayDeParametros['codigo']);
+        $precioFinal = pedido_plato::TraerSumaPrecioPorCodigo($arrayDeParametros['codigo']);
 
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         try{
             $sql =$pdo->RetornarConsulta("UPDATE pedidos AS p
-            INNER JOIN pedido_producto AS pp ON pp.codigo = p.codigo
+            INNER JOIN pedido_plato AS pp ON pp.codigo = p.codigo
             SET p.estado= 3,
                 pp.estado=3,
                 p.precioFinal = :precioFinal
@@ -148,7 +148,7 @@ class pedido{
         $pdo = AccesoDatos::dameUnObjetoAcceso();
         try{
             $sql =$pdo->RetornarConsulta("UPDATE pedidos AS p
-            INNER JOIN pedido_producto AS pp ON pp.codigo = p.codigo
+            INNER JOIN pedido_plato AS pp ON pp.codigo = p.codigo
             INNER JOIN mesas AS me ON me.id = p.mesa
             SET p.estado= 4,
                 me.estado=3,

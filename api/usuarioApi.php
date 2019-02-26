@@ -58,6 +58,7 @@ class UsuarioApi{
     }
     
 
+
      public function traerOperacionesPorSector($request, $response, $args){
         $operaciones = operaciones::traerOperacionesPorSector();
         $newResponse = $response->withJson($operaciones, 200);
@@ -72,6 +73,11 @@ class UsuarioApi{
 
      public function traerCantidadOperacionesPorEmpl($request, $response, $args){
         $operaciones = operaciones::traerCantidadOperacionesPorEmpl();
+        $newResponse = $response->withJson($operaciones, 200);
+        return $newResponse;
+    }
+         public function traerActividadEmpleados($request, $response, $args){
+        $operaciones = usuario::traerActividadEmpleado();
         $newResponse = $response->withJson($operaciones, 200);
         return $newResponse;
     }
